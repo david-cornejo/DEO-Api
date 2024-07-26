@@ -1,28 +1,16 @@
-import { Sequelize } from 'sequelize';
-import sequelize from '../../config/database';
-import Noticia from './noticia';
-import Imagen from './imagen';
-import Vacante from './vacante';
-import Usuario from './usuario';
+const { Noticia, NoticiaSchema } = require('../models/noticiaModel');
+const { Imagen, ImagenSchema } = require('../models/imagenModel');
+const { Vacante, VacanteSchema } = require('../models/vacanteModel');
+const { Usuario, UsuarioSchema } = require('../models/usuarioModel');
 
-const db: {
-  sequelize: Sequelize;
-  Sequelize: typeof Sequelize;
-  Noticia: typeof Noticia;
-  Imagen: typeof Imagen;
-  Vacante: typeof Vacante;
-  Usuario: typeof Usuario;
-} = {
-  sequelize,
-  Sequelize,
-  Noticia,
-  Imagen,
-  Vacante,
-  Usuario,
-};
+function setupModels(sequelize: any) {
+  Noticia.init(NoticiaSchema, Noticia.config(sequelize));
+  Imagen.init(ImagenSchema, Imagen.config(sequelize));
+  Vacante.init(VacanteSchema, Vacante.config(sequelize));
+  Usuario.init(UsuarioSchema, Usuario.config(sequelize));
 
-// Definir relaciones
-Noticia.hasOne(Imagen, { foreignKey: 'id_noticia' });
-Imagen.belongsTo(Noticia, { foreignKey: 'id_noticia' });
+  Noticia.associate(sequelize.models);
+  Imagen.associate(sequelize.models);
+}
 
-export default db;
+module.exports = setupModels;
