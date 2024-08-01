@@ -47,8 +47,8 @@ class Noticia extends Model {
   public createdAt!: Date;
 
   static associate(models: any) {
-    this.hasOne(models.Imagen, {
-      as: 'imagen',
+    this.hasMany(models.Imagen, {
+      as: 'imagenes',
       foreignKey: 'id_noticia',
     });
   }

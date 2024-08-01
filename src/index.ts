@@ -1,15 +1,30 @@
 import express from 'express';
+import cors from 'cors';
 import noticiaRoutes from './routes/noticiaRoutes';
 import imagenRoutes from './routes/imagenRoutes';
 import vacanteRoutes from './routes/vacanteRoutes';
 import usuarioRoutes from './routes/usuarioRoutes';
 import sequelize from './config/database';
+import bodyParser from 'body-parser';
 const setupModels = require('./db/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const corsOptions = {
+  origin: 'http://localhost:5173', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
+app.use(express.json({ limit: '50mb'}));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/api/noticias', noticiaRoutes);
 app.use('/api/imagenes', imagenRoutes);

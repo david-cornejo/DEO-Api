@@ -3,8 +3,14 @@ import { Noticia } from '../db/models/noticiaModel';
 import { Imagen } from '../db/models/imagenModel';
 
 export const getNoticias = async (req: Request, res: Response) => {
-  const noticiasList = await Noticia.findAll({ include: [Imagen] });
-  res.json(noticiasList);
+  try {
+    const noticias = await Noticia.findAll({
+      include: [{ model: Imagen, as: 'imagenes' }]
+    });
+    return res.status(200).json(noticias);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al obtener las noticias', error });
+  }
 };
 
 export const createNoticia = async (req: Request, res: Response) => {
