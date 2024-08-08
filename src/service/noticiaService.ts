@@ -6,8 +6,20 @@ export const getNoticias = async (req: Request, res: Response) => {
   try {
     const noticias = await Noticia.findAll({
       include: [{ model: Imagen, as: 'imagenes' }]
+    }); 
+
+    const noticiasConImagenes = noticias.map(noticia => {
+      const noticiaJSON = noticia.toJSON() as any; 
+
+      noticiaJSON.imagenes = noticiaJSON.imagenes.map((imagen: any) => ({
+        ...imagen,
+        imagen: `${imagen.imagen}`
+      }));
+
+      return noticiaJSON;
     });
-    return res.status(200).json(noticias);
+
+    return res.status(200).json(noticiasConImagenes);
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener las noticias', error });
   }

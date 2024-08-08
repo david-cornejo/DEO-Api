@@ -12,7 +12,7 @@ export = {
       },
       imagen: {
         allowNull: false,
-        type: DataTypes.BLOB,
+        type: DataTypes.BLOB('long'),
       },
       id_noticia: {
         allowNull: false,
