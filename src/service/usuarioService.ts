@@ -50,5 +50,20 @@ export const deleteUsuario = async (req: Request, res: Response) => {
     res.status(204).send();
   } else {
     res.status(404).json({ message: 'Usuario not found' });
-  }
+  } 
+};
+
+export const buscarEmail = async (email: string): Promise<Usuario | null> => {
+  return await Usuario.findOne({ where: { email: email } });
+};
+
+export const buscarUno = async (id: number): Promise<Usuario | null> => {
+  return await Usuario.findOne({ where: { id: id } });
+};
+
+export const actualizar = async (id: number, changes: Partial<Usuario>): Promise<[affectedCount: number]> => {
+  
+  const response = await Usuario.update(changes, { where: { id: id } }); 
+  return response;
+  
 };

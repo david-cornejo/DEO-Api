@@ -24,6 +24,10 @@ export = {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
+      recovery_token: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
     });
   },
 

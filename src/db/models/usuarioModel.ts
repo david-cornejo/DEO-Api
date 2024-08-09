@@ -24,6 +24,10 @@ const UsuarioSchema = {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+  recovery_token: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
 };
 
 class Usuario extends Model {
@@ -31,13 +35,14 @@ class Usuario extends Model {
   public email!: string;
   public password!: string;
   public createdAt!: Date;
+  public recovery_token!: string;
 
   static config(sequelize: Sequelize) {
     return {
       sequelize,
       tableName: USUARIO_TABLE,
       modelName: 'Usuario',
-      timestamps: false,
+      timestamps: false,      
     };
   }
 }
