@@ -10,8 +10,7 @@ export const getImagen = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Imagen not found' });
     }
 
-    // Enviar la imagen con el tipo de contenido adecuado
-    res.set('Content-Type', 'image/jpg' || 'image/png' || 'image/jpeg'); // Ajusta el tipo de contenido según el tipo de imagen que estás guardando
+    res.set('Content-Type', 'image/jpg' || 'image/png' || 'image/jpeg' || 'image/webp');
     res.send(imagen.imagen);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener la imagen', error });
