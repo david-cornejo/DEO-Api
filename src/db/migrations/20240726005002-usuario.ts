@@ -19,11 +19,6 @@ export = {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
       recovery_token: {
         allowNull: true,
         type: DataTypes.STRING,

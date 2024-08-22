@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import https from 'https';
+import fs from 'fs';
 import noticiaRoutes from './routes/noticiaRoutes';
 import imagenRoutes from './routes/imagenRoutes';
 import vacanteRoutes from './routes/vacanteRoutes';
@@ -19,6 +21,11 @@ const corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
+};
+
+const httpsOptions = {
+  key: fs.readFileSync('src/config/key.pem'),
+  cert: fs.readFileSync('./certs/'),
 };
 
 app.use(cors(corsOptions));
