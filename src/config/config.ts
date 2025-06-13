@@ -7,6 +7,7 @@ const config = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 15432,
     apiKey: process.env.API_KEY,
     jwtSecret: process.env.JWT_SECRET || 'default_jwt_secret',
     emailPass: process.env.EMAIL_PASS,
