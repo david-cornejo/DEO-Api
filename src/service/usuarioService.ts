@@ -31,22 +31,22 @@ export const loginUsuario = async (req: Request, res: Response) => {
   const token = signToken({ id: usuario.id, email: usuario.email });
 
   // Configuración de la cookie para producción
-  res.cookie('authToken', token, {
-    httpOnly: false,
-    secure: process.env.COOKIE_SECURE === 'true',
-    sameSite: 'none',
-    domain: process.env.COOKIE_DOMAIN,
-    path: '/',
-  });
+  // res.cookie('authToken', token, {
+  //   httpOnly: false,
+  //   secure: process.env.COOKIE_SECURE === 'true',
+  //   sameSite: 'none',
+  //   domain: process.env.COOKIE_DOMAIN,
+  //   path: '/',
+  // });
 
   // Configuración de la cookie para pruebas locales
-  // res.cookie('authToken', token, {
-  //   httpOnly: false, // Accesible desde JS
-  //   secure: false, // No requiere HTTPS en local
-  //   sameSite: 'lax', // Protección básica contra CSRF
-  //   domain: 'localhost', // Dominio para pruebas locales
-  //   path: '/', // Ruta de la cookie
-  // });
+  res.cookie('authToken', token, {
+    httpOnly: false, // Accesible desde JS
+    secure: false, // No requiere HTTPS en local
+    sameSite: 'lax', // Protección básica contra CSRF
+    domain: 'localhost', // Dominio para pruebas locales
+    path: '/', // Ruta de la cookie
+  });
 
   res.status(200).json({ token });
 };
