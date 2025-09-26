@@ -55,6 +55,7 @@ const PORT = process.env.PORT || 3000;
 const corsOptions = {
   origin: "http://localhost:3000", // Cambia esto al origen de tu frontend
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Habilita el envío de cookies
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };

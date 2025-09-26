@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { Usuario } from '../db/models/usuarioModel';
-import { hashPassword, verifyPassword } from '../utils/auth/pass-hash';
-import { signToken } from '../utils/auth/token-sign';
+import { Request, Response } from "express";
+import { Usuario } from "../db/models/usuarioModel";
+import { hashPassword, verifyPassword } from "../utils/auth/pass-hash";
+import { signToken } from "../utils/auth/token-sign";
 
 export const getUsuarios = async (req: Request, res: Response) => {
   const usuariosList = await Usuario.findAll();
@@ -17,15 +17,17 @@ export const registerUsuario = async (req: Request, res: Response) => {
 
 export const loginUsuario = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const usuario = await Usuario.findOne({ where: { email } }) as Usuario | null;
+  const usuario = (await Usuario.findOne({
+    where: { email },
+  })) as Usuario | null;
 
   if (!usuario) {
-    return res.status(401).json({ message: 'Invalid email or password' });
+    return res.status(401).json({ message: "Invalid email or password" });
   }
 
   const isPasswordValid = await verifyPassword(password, usuario.password);
   if (!isPasswordValid) {
-    return res.status(401).json({ message: 'Invalid email or password' });
+    return res.status(401).json({ message: "Invalid email or password" });
   }
 
   const token = signToken({ id: usuario.id, email: usuario.email });
@@ -40,25 +42,27 @@ export const loginUsuario = async (req: Request, res: Response) => {
   // });
 
   // Configuración de la cookie para pruebas locales
-  res.cookie('authToken', token, {
+  res.cookie("authToken", token, {
     httpOnly: false, // Accesible desde JS
     secure: false, // No requiere HTTPS en local
-    sameSite: 'lax', // Protección básica contra CSRF
-    domain: 'localhost', // Dominio para pruebas locales
-    path: '/', // Ruta de la cookie
+    sameSite: "lax", // Protección básica contra CSRF
+    domain: "localhost", // Dominio para pruebas locales
+    path: "/", // Ruta de la cookie
   });
 
-  res.status(200).json({ token });
+  res.status(200).json({ message: "Login successful" });
 };
 
 export const updateUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const [updated] = await Usuario.update(req.body, { where: { id: Number(id) } });
+  const [updated] = await Usuario.update(req.body, {
+    where: { id: Number(id) },
+  });
   if (updated) {
     const updatedUsuario = await Usuario.findOne({ where: { id: Number(id) } });
     res.status(200).json(updatedUsuario);
   } else {
-    res.status(404).json({ message: 'Usuario not found' });
+    res.status(404).json({ message: "Usuario not found" });
   }
 };
 
@@ -68,8 +72,8 @@ export const deleteUsuario = async (req: Request, res: Response) => {
   if (deleted) {
     res.status(204).send();
   } else {
-    res.status(404).json({ message: 'Usuario not found' });
-  } 
+    res.status(404).json({ message: "Usuario not found" });
+  }
 };
 
 export const buscarEmail = async (email: string): Promise<Usuario | null> => {
@@ -80,9 +84,10 @@ export const buscarUno = async (id: number): Promise<Usuario | null> => {
   return await Usuario.findOne({ where: { id: id } });
 };
 
-export const actualizar = async (id: number, changes: Partial<Usuario>): Promise<[affectedCount: number]> => {
-  
-  const response = await Usuario.update(changes, { where: { id: id } }); 
+export const actualizar = async (
+  id: number,
+  changes: Partial<Usuario>
+): Promise<[affectedCount: number]> => {
+  const response = await Usuario.update(changes, { where: { id: id } });
   return response;
-  
 };
