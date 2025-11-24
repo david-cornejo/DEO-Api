@@ -13,7 +13,7 @@ const ImagenSchema = {
   },
   imagen: {
     allowNull: false,
-    type: DataTypes.BLOB('long'),
+    type: DataTypes.TEXT,
   },
   id_noticia: {
     allowNull: false,
@@ -34,7 +34,7 @@ const ImagenSchema = {
 
 class Imagen extends Model {
   public id!: number;
-  public imagen!: Buffer;
+  public imagen!: string;
   public id_noticia!: number;
   public createdAt!: Date;
 

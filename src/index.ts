@@ -50,11 +50,12 @@ const setupModels = require("./db/models");
 
 // Desarrollo|
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 const corsOptions = {
-  origin: "http://localhost:3000", // Cambia esto al origen de tu frontend
+  origin: "http://localhost:3001", // Cambia esto al origen de tu frontend
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Permite cookies y headers de autenticación
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };

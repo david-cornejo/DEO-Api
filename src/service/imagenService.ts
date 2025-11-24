@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { Imagen } from '../db/models/imagenModel';
+import FormData from 'form-data';
+import axios from 'axios';
 
 export const getImagen = async (req: Request, res: Response) => {
   try {
@@ -10,8 +12,8 @@ export const getImagen = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Imagen not found' });
     }
 
-    res.set('Content-Type', 'image/jpg' || 'image/png' || 'image/jpeg' || 'image/webp');
-    res.send(imagen.imagen);
+    // Devolver la URL de la imagen en lugar del blob
+    res.status(200).json({ url: imagen.imagen });
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener la imagen', error });
   }
@@ -20,10 +22,58 @@ export const getImagen = async (req: Request, res: Response) => {
 export const createImagen = async (req: Request, res: Response) => {
   const { id_noticia, imagen } = req.body;
   try {
-    const newImagen = await Imagen.create({ id_noticia, imagen });
-    res.status(201).json(newImagen);
+    // Crear FormData para enviar la imagen
+    const formData = new FormData();
+    
+    // Convertir el base64 a Buffer y detectar el tipo de imagen
+    let imageBuffer: Buffer;
+    let mimeType = 'image/jpeg';
+    let extension = 'jpg';
+    
+    if (typeof imagen === 'string') {
+      // Detectar el tipo de imagen del base64
+      const mimeMatch = imagen.match(/^data:(image\/\w+);base64,/);
+      if (mimeMatch) {
+        mimeType = mimeMatch[1];
+        extension = mimeType.split('/')[1];
+      }
+      
+      // Remover el prefijo data:image/...;base64,
+      const base64Data = imagen.replace(/^data:image\/\w+;base64,/, '');
+      imageBuffer = Buffer.from(base64Data, 'base64');
+    } else {
+      imageBuffer = Buffer.from(imagen);
+    }
+    
+    // Agregar el archivo al FormData
+    formData.append('file', imageBuffer, {
+      filename: `imagen.${extension}`,
+      contentType: mimeType,
+    });
+    
+    // Agregar el idNoticia si existe
+    if (id_noticia) {
+      formData.append('idNoticia', id_noticia.toString());
+    }
+
+    // Enviar la imagen al servicio externo usando axios
+    const uploadResponse = await axios.post('http://localhost:3000/images/upload', formData, {
+      headers: formData.getHeaders(),
+    });
+
+    const data = uploadResponse.data;
+    
+    // Guardar la URL de la imagen en la base de datos
+    const imageUrl = data.image.url;
+    const newImagen = await Imagen.create({ id_noticia, imagen: imageUrl });
+    
+    res.status(201).json({
+      ...newImagen.toJSON(),
+      externalId: data.image.id
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear la imagen', error });
+    console.error('Error al crear imagen:', error);
+    res.status(500).json({ message: 'Error al crear la imagen', error: error instanceof Error ? error.message : error });
   }
 };
 
