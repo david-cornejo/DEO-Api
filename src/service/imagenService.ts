@@ -63,14 +63,8 @@ export const createImagen = async (req: Request, res: Response) => {
 
     const data = uploadResponse.data;
     
-    // Guardar la URL de la imagen en la base de datos
-    const imageUrl = data.image.url;
-    const newImagen = await Imagen.create({ id_noticia, imagen: imageUrl });
-    
-    res.status(201).json({
-      ...newImagen.toJSON(),
-      externalId: data.image.id
-    });
+    // La API externa ya guarda el registro en la base de datos, solo devolvemos la respuesta
+    res.status(201).json(data);
   } catch (error) {
     console.error('Error al crear imagen:', error);
     res.status(500).json({ message: 'Error al crear la imagen', error: error instanceof Error ? error.message : error });
