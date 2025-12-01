@@ -57,7 +57,7 @@ export const createImagen = async (req: Request, res: Response) => {
     }
 
     // Enviar la imagen al servicio externo usando axios
-    const uploadResponse = await axios.post('http://localhost:3000/images/upload', formData, {
+    const uploadResponse = await axios.post(`${process.env.IMAGE_SERVICE_URL}/images/upload`, formData, {
       headers: formData.getHeaders(),
     });
 

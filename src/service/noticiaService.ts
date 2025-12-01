@@ -6,6 +6,7 @@ export const getNoticias = async (req: Request, res: Response) => {
   try {
     const noticias = await Noticia.findAll({
       include: [{ model: Imagen, as: "imagenes" }],
+      order: [['fecha', 'DESC']],
     });
 
     const noticiasConImagenes = noticias.map((noticia) => {
