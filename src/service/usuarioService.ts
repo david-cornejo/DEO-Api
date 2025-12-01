@@ -39,13 +39,13 @@ export const loginUsuario = async (req: Request, res: Response) => {
   //   path: '/',
   // });
 
-  // Configuración de la cookie para pruebas locales
+  // Configuración de la cookie para producción
   res.cookie('authToken', token, {
-    httpOnly: false, // Accesible desde JS
-    secure: false, // No requiere HTTPS en local
-    sameSite: 'lax', // Protección básica contra CSRF
-    domain: 'localhost', // Dominio para pruebas locales
-    path: '/', // Ruta de la cookie
+    httpOnly: false, // Cambiado a true para seguridad (previene XSS)
+    secure: true, // Solo HTTPS
+    sameSite: 'none', // Permite cross-site (necesario para subdominios diferentes)
+    domain: '.sm8.com.mx', // Sin punto inicial - cubre todos los subdominios
+    path: '/',
   });
 
   res.status(200).json({ token });
