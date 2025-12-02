@@ -61,7 +61,7 @@ export const sendRecovery = async(req: Request, res: Response)=>{
     }
     const payload = { sub: user.id };
     const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '15min' });
-    const link = `http://sm8.com.mx/#/change-password?token=${token}`;
+    const link = `https://sm8.com.mx/changePassword?token=${token}`;
     await usuarioService.actualizar(user.id, { recovery_token: token });
     const mail = {
       from: config.email,
