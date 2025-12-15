@@ -80,7 +80,7 @@ app.use("/api/imagenes", imagenRoutes);
 app.use("/api/vacantes", vacanteRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/contacto", contactoRoutes);
+app.use("/api", contactoRoutes);
 
 setupModels(sequelize);
 
