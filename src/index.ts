@@ -6,6 +6,7 @@ import imagenRoutes from "./routes/imagenRoutes";
 import vacanteRoutes from "./routes/vacanteRoutes";
 import usuarioRoutes from "./routes/usuarioRoutes";
 import authRoutes from "./routes/authRoutes";
+import contactoRoutes from "./routes/contactoRoutes";
 import sequelize from "./config/database";
 import bodyParser from "body-parser";
 import fs from "fs";
@@ -79,6 +80,7 @@ app.use("/api/imagenes", imagenRoutes);
 app.use("/api/vacantes", vacanteRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/contacto", contactoRoutes);
 
 setupModels(sequelize);
 
