@@ -60,10 +60,16 @@ export const enviarCorreo = async (req: Request, res: Response) => {
       </div>
     `;
 
+    // Determinar destinatarios según el origen
+    let destinatarios = process.env.EMAIL;
+    if (origen === 'España' && process.env.EMAIL_ESPANA) {
+      destinatarios = `${process.env.EMAIL}, ${process.env.EMAIL_ESPANA}`;
+    }
+
     // Opciones del correo
     const mailOptions = {
       from: process.env.EMAIL,
-      to: process.env.EMAIL, // Enviar al correo de contacto
+      to: destinatarios, // Enviar al correo de contacto (y adicional si es España)
       replyTo: correoDestino, // Permitir responder al correo del usuario
       subject: `[Contacto - ${origen}] ${asunto}`,
       html: htmlContent,
