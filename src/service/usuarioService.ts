@@ -44,7 +44,7 @@ export const loginUsuario = async (req: Request, res: Response) => {
     httpOnly: false, // Cambiado a true para seguridad (previene XSS)
     secure: true, // Solo HTTPS
     sameSite: 'none', // Permite cross-site (necesario para subdominios diferentes)
-    domain: 'localhost', // Sin punto inicial - cubre todos los subdominios
+    domain: '.sm8.com.mx', // Sin punto inicial - cubre todos los subdominios
     path: '/',
   });
 
