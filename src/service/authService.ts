@@ -6,6 +6,8 @@ import config from './../config/config';
 import * as usuarioService from './usuarioService';
 import { Usuario } from '../db/models/usuarioModel';
 import { Request, Response } from 'express';
+import { verifyPassword } from '../utils/auth/pass-verify';
+import { signToken } from '../utils/auth/token-sign';
 
 
 export const getUser = async(email_usuario: string, password_usuario: string) => {
@@ -109,4 +111,49 @@ export const EnviarEmail = async(infoMail: nodemailer.SendMailOptions)=>{
     await transporter.sendMail(infoMail);
     return { message: 'Correo enviado' };
   };
+
+export const logout = async(req: Request, res: Response) => {
+  try {
+    res.clearCookie('token');
+    res.send({ message: 'Sesión cerrada exitosamente' });
+  } catch (error) {
+    throw boom.internal();
+  }
+};
+
+export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  const usuario = await Usuario.findOne({ where: { email } }) as Usuario | null;
+
+  if (!usuario) {
+    return res.status(401).json({ message: 'Invalid email or password' });
+  }
+
+  const isPasswordValid = await verifyPassword(password, usuario.password);
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: 'Invalid email or password' });
+  }
+
+  const token = signToken({ id: usuario.id, email: usuario.email });
+
+  // Configuración de la cookie para producción
+  // res.cookie('authToken', token, {
+  //   httpOnly: false,
+  //   secure: process.env.COOKIE_SECURE === 'true',
+  //   sameSite: 'none',
+  //   domain: process.env.COOKIE_DOMAIN,
+  //   path: '/',
+  // });
+
+  // Configuración de la cookie para producción
+  res.cookie('authToken', token, {
+    httpOnly: false, // Cambiado a true para seguridad (previene XSS)
+    secure: true, // Solo HTTPS
+    sameSite: 'none', // Permite cross-site (necesario para subdominios diferentes)
+    domain: '.sm8.com.mx', // Sin punto inicial - cubre todos los subdominios
+    path: '/',
+  });
+
+  res.status(200).json({ token });
+};
 
