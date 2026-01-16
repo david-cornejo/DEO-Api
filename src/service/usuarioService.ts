@@ -15,42 +15,6 @@ export const registerUsuario = async (req: Request, res: Response) => {
   res.status(201).json(newUsuario);
 };
 
-export const loginUsuario = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const usuario = await Usuario.findOne({ where: { email } }) as Usuario | null;
-
-  if (!usuario) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
-
-  const isPasswordValid = await verifyPassword(password, usuario.password);
-  if (!isPasswordValid) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
-
-  const token = signToken({ id: usuario.id, email: usuario.email });
-
-  // Configuración de la cookie para producción
-  // res.cookie('authToken', token, {
-  //   httpOnly: false,
-  //   secure: process.env.COOKIE_SECURE === 'true',
-  //   sameSite: 'none',
-  //   domain: process.env.COOKIE_DOMAIN,
-  //   path: '/',
-  // });
-
-  // Configuración de la cookie para producción
-  res.cookie('authToken', token, {
-    httpOnly: false, // Cambiado a true para seguridad (previene XSS)
-    secure: true, // Solo HTTPS
-    sameSite: 'none', // Permite cross-site (necesario para subdominios diferentes)
-    domain: 'localhost', // Sin punto inicial - cubre todos los subdominios
-    path: '/',
-  });
-
-  res.status(200).json({ token });
-};
-
 export const updateUsuario = async (req: Request, res: Response) => {
   const { id } = req.params;
   const [updated] = await Usuario.update(req.body, { where: { id: Number(id) } });
