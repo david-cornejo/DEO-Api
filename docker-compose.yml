@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  deo-api:
+    image: deo-api
+    container_name: deo-api
+    restart: always
+    ports:
+      - "3003:3003"
+    env_file:
+      - .env
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
