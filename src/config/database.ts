@@ -11,6 +11,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 15432,
     dialect: "postgres",
+    logging: false,
   }
 );
 
