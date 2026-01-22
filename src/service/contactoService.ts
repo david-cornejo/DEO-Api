@@ -17,7 +17,7 @@ export const enviarCorreo = async (req: Request, res: Response) => {
     const { nombre, correoDestino, telefono, asunto, empresa, ciudad, mensaje, origen }: ContactoPayload = req.body;
 
     // Validar que todos los campos requeridos estén presentes
-    if (!nombre || !correoDestino || !telefono || !asunto || !empresa || !ciudad || !mensaje || !origen) {
+    if (!nombre || !correoDestino || !telefono || !asunto || !ciudad || !mensaje || !origen) {
       return res.status(400).json({ message: "Todos los campos son requeridos" });
     }
 
