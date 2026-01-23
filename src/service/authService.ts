@@ -114,7 +114,12 @@ export const EnviarEmail = async(infoMail: nodemailer.SendMailOptions)=>{
 
 export const logout = async(req: Request, res: Response) => {
   try {
-    res.clearCookie('authToken');
+    res.clearCookie('authToken',{
+      domain: config.cookieDomain,
+      path: '/',
+      secure: true,
+      sameSite: 'none',
+    });
     res.send({ message: 'Sesión cerrada exitosamente' });
   } catch (error) {
     throw boom.internal();
@@ -136,21 +141,11 @@ export const login = async (req: Request, res: Response) => {
 
   const token = signToken({ id: usuario.id, email: usuario.email });
 
-  // Configuración de la cookie para producción
-  // res.cookie('authToken', token, {
-  //   httpOnly: false,
-  //   secure: process.env.COOKIE_SECURE === 'true',
-  //   sameSite: 'none',
-  //   domain: process.env.COOKIE_DOMAIN,
-  //   path: '/',
-  // });
-
-  // Configuración de la cookie para producción
   res.cookie('authToken', token, {
     httpOnly: false, // Cambiado a true para seguridad (previene XSS)
     secure: true, // Solo HTTPS
     sameSite: 'none', // Permite cross-site (necesario para subdominios diferentes)
-    domain: '.sm8.com.mx', // Sin punto inicial - cubre todos los subdominios
+    domain: config.cookieDomain, // Sin punto inicial - cubre todos los subdominios
     path: '/',
   });
 
