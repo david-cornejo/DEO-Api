@@ -13,6 +13,7 @@ const config = {
     emailPass: process.env.EMAIL_PASS,
     email: process.env.EMAIL,
     hostEmail: process.env.HOST_EMAIL,
+    cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
     dialect: 'postgres',
 };
 
