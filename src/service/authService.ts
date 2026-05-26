@@ -141,6 +141,9 @@ export const login = async (req: Request, res: Response) => {
 
   const token = signToken({ id: usuario.id, email: usuario.email });
 
+  // Log temporal de diagnóstico
+  console.log('[login] Firmando cookie con dominio:', config.cookieDomain);
+
   res.cookie('authToken', token, {
     httpOnly: false, // Cambiado a true para seguridad (previene XSS)
     secure: true, // Solo HTTPS
