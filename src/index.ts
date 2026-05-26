@@ -1,3 +1,14 @@
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Cargar variables de entorno PRIMERO
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+console.log('[index.ts] Variables de entorno cargadas:');
+console.log('  COOKIE_DOMAIN:', process.env.COOKIE_DOMAIN);
+console.log('  NODE_ENV:', process.env.NODE_ENV);
+console.log('  DB_HOST:', process.env.DB_HOST ? '✓ definido' : '✗ undefined');
+
 import express from "express";
 import cors from "cors";
 import https from "https"; // Agregar esta importación
@@ -7,6 +18,7 @@ import vacanteRoutes from "./routes/vacanteRoutes";
 import usuarioRoutes from "./routes/usuarioRoutes";
 import authRoutes from "./routes/authRoutes";
 import contactoRoutes from "./routes/contactoRoutes";
+import catalogoRoutes from "./routes/catalogoRoutes";
 import sequelize from "./config/database";
 import bodyParser from "body-parser";
 import fs from "fs";
@@ -46,11 +58,11 @@ const setupModels = require("./db/models");
 // app.use('/api/usuarios', usuarioRoutes);
 // app.use('/api/auth', authRoutes);
 //app.use("/api", contactoRoutes);
+// app.use('/api/catalogo', catalogoRoutes);
 
 // setupModels(sequelize);
 
-// sequelize.sync().then(() => {
-//   // Crear servidor HTTPS en lugar de HTTP
+// sequelize.authenticate().then(() => {
 //   https.createServer(httpsOptions, app).listen(PORT, () => {
 //     console.log(`HTTPS Server is running on port ${PORT}`);
 //   });
@@ -82,11 +94,12 @@ app.use("/api/vacantes", vacanteRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", contactoRoutes);
+app.use("/api/catalogo", catalogoRoutes);
 
 setupModels(sequelize);
 
 sequelize
-  .sync()
+  .authenticate()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

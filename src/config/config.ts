@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+// Cargar .env desde la raíz del proyecto
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const config = {
     username: process.env.DB_USERNAME,
@@ -16,5 +18,9 @@ const config = {
     cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
     dialect: 'postgres',
 };
+
+// Log temporal de diagnóstico (puedes quitarlo después)
+console.log('[config] COOKIE_DOMAIN cargado:', process.env.COOKIE_DOMAIN);
+console.log('[config] NODE_ENV:', process.env.NODE_ENV);
 
 export default config;
