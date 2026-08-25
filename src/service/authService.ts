@@ -115,7 +115,7 @@ export const EnviarEmail = async(infoMail: nodemailer.SendMailOptions)=>{
 export const logout = async(req: Request, res: Response) => {
   try {
     res.clearCookie('authToken',{
-      domain: config.cookieDomain,
+      domain: '.sm8.com.mx',
       path: '/',
       secure: true,
       sameSite: 'none',
@@ -148,7 +148,7 @@ export const login = async (req: Request, res: Response) => {
     httpOnly: false, // Cambiado a true para seguridad (previene XSS)
     secure: true, // Solo HTTPS
     sameSite: 'none', // Permite cross-site (necesario para subdominios diferentes)
-    domain: config.cookieDomain, // Sin punto inicial - cubre todos los subdominios
+    domain: '.sm8.com.mx', // Sin punto inicial - cubre todos los subdominios
     path: '/',
   });
 
